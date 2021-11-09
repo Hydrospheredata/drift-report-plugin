@@ -1,0 +1,21 @@
+import json
+from pydantic import BaseSettings
+
+
+class Config(BaseSettings):
+    endpoint_override: str
+    self_addr: str
+    debug_env: bool = False
+    http_port: int = 5000
+    manager_addr: str = "monitoring-manager:8081"
+
+
+PRODUCTION_SUBSAMPLE_SIZE = 400
+SIGNIFICANCE_LEVEL = 0.01
+
+try:
+    BUILD_INFO = json.load(open("buildinfo.json"))
+except Exception:
+    BUILD_INFO = {}
+
+CONFIG = Config()

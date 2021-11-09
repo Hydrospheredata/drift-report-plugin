@@ -1,0 +1,1 @@
+python -m drift_report.app
