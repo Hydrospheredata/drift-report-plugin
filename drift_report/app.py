@@ -40,8 +40,8 @@ def buildinfo():
 
 
 @app.get(BASE_URL + "report")
-def get_reports():
-    return report_repository.REPORT_REPO.all()
+def get_reports(model_name: str, model_version: int):
+    return report_repository.REPORT_REPO.for_model(model_name, model_version)
 
 
 if __name__ == "__main__":
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         plugin_id="data_drift",
         description="Data drift plugin for inference data",
         routePath="reports",
-        ngModuleName="DashboardModule",
+        ngModuleName="DriftReportModule",
         remoteName="hydrosphereDriftReportUi",
         exposedModule="./Module",
         addr=CONFIG.self_addr,

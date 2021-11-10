@@ -27,10 +27,14 @@ class StatisticalReport:
     def __init__(
         self,
         filename: str,
+        model_name: str,
+        model_version: int,
         signature: ModelSignature,
         training_data: pd.DataFrame,
         production_data: pd.DataFrame,
     ):
+        self.model_name = model_name
+        self.model_version = model_version
         self.filename = filename
         self.__is_processed = False
 
@@ -87,6 +91,8 @@ class StatisticalReport:
 
         numpy_json = {
             "filename": self.filename,
+            "model_name": self.model_name,
+            "model_version": self.model_version,
             "overall_probability_drift": self.__overall_drift(),
             "per_feature_report": self.__per_feature_report(),
             "warnings": self.__warnings_report(),

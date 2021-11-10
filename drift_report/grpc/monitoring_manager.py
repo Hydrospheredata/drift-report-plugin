@@ -66,6 +66,8 @@ class MonitoringDataSubscriber:
                 training_data = pandas.read_csv(s3.open(model.training_data, mode="rb"))
                 report = StatisticalReport(
                     inference_path,
+                    model.name,
+                    model.version,
                     model.signature,
                     training_data,
                     inference_data,

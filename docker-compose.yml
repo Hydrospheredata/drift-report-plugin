@@ -33,7 +33,7 @@ services:
 
   stat-plugin:
     build:
-       context: .
+      context: .
     depends_on:
       - monitoring-manager
     ports:
