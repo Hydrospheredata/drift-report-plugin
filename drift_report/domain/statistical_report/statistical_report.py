@@ -93,9 +93,11 @@ class StatisticalReport:
             "filename": self.filename,
             "model_name": self.model_name,
             "model_version": self.model_version,
-            "overall_probability_drift": self.__overall_drift(),
-            "per_feature_report": self.__per_feature_report(),
-            "warnings": self.__warnings_report(),
+            "report": {
+                "overall_probability_drift": self.__overall_drift(),
+                "per_feature_report": self.__per_feature_report(),
+                "warnings": self.__warnings_report(),
+            },
         }
 
         encoded_numpy_json = json.dumps(
