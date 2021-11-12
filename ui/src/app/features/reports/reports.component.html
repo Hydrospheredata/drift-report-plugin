@@ -1,0 +1,19 @@
+<!--<div class="px-6 py-4">-->
+<!--    <div class="font-bold py-2 text-gray-900">Reports</div>-->
+<!--    <mat-table *ngIf="reports$ | async as reports" [dataSource]="reports" class="rounded-md shadow-lg bg-white mt-3">-->
+<!--      <ng-container matColumnDef="batch">-->
+<!--        <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let element" class="cursor-pointer hover:bg-gray-100 duration-150">-->
+<!--          {{ element.filename }}-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--      <mat-row-->
+<!--        [routerLink]="['drift-report']"-->
+<!--        *matRowDef="let row; columns: displayedColumns"-->
+<!--      ></mat-row>-->
+<!--    </mat-table>-->
+<!--  </div>-->
+
+{{reports$ | async | json}}

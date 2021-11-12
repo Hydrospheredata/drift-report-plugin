@@ -1,0 +1,14 @@
+<div
+  class="rounded-full flex justify-between"
+  [ngStyle]="{
+    background: backgroundColor,
+    padding: justIcon ? '1px' : '5px 8px'
+  }"
+>
+  <hs-icon
+    class="text-white"
+    name="{{iconType}}"
+    [ngStyle]="stylesMap"
+  ></hs-icon>
+  <span class="text-white text-xs font-bold px-1" *ngIf="!justIcon">{{ statusText }}</span>
+</div>

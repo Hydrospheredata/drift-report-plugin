@@ -1,0 +1,7 @@
+.statistics__drift {
+  @apply font-bold;
+
+  &--changed {
+    @apply text-red-600;
+  }
+}
