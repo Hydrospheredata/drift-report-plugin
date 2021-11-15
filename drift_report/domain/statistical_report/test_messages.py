@@ -10,6 +10,12 @@ def mean_test_message(test: StatisticalTest):
         return f"Significant change in the mean, p<{threshold_to_apa_style(test.threshold)}"
     else:
         return "No significant change in the mean"
+    
+def distribution_test_message(test: StatisticalTest):
+    if test.has_changed:
+        return f"Significant change in the distribution, p<{threshold_to_apa_style(test.threshold)}"
+    else:
+        return "No significant change in the distribution"
 
 
 def variance_test_message(test: StatisticalTest):

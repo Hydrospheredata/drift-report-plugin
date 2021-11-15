@@ -18,6 +18,7 @@ from sklearn.preprocessing import KBinsDiscretizer, LabelEncoder
 from drift_report.domain.statistical_report.statistical_test import StatisticalTest
 from drift_report.domain.statistical_report.test_messages import (
     mean_test_message,
+    distribution_test_message,
     median_test_message,
     variance_test_message,
     chi_square_message,
@@ -272,11 +273,11 @@ class NumericalFeatureReport(StatisticalFeatureReport):
         # List of tests used for comparing production and training numerical columns
         self.tests: List[StatisticalTest] = [
             StatisticalTest(
-                "Mean",
+                "Distribution",
                 np.mean,
-                stats.ttest_ind,
-                mean_test_message,
-                {"equal_var": False},
+                stats.ks_2samp,
+                distribution_test_message,
+                {'alternative': 'two-sided'},
             ),
             StatisticalTest(
                 "Median",
