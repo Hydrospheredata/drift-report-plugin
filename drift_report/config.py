@@ -3,8 +3,8 @@ from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
-    endpoint_override: str
-    self_addr: str
+    endpoint_override: str = "http://minio:9000"
+    self_addr: str = "http://stat:5000"
     debug_env: bool = False
     http_port: int = 5000
     manager_addr: str = "monitoring-manager:8081"
