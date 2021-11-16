@@ -52,7 +52,7 @@ if __name__ == "__main__":
         plugin_id="data_drift",
         description="Data drift plugin for inference data",
         routePath="reports",
-        ngModuleName="DriftReportModule",
+        ngModuleName="ReportsModule",
         remoteName="hydrosphereDriftReportUi",
         exposedModule="./Module",
         addr=CONFIG.self_addr,

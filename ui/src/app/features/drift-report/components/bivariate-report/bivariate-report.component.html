@@ -1,0 +1,79 @@
+<div>
+  <div class="font-bold mb-2">Output feature relationship report</div>
+  <ng-container *ngIf="reports && reports.length">
+    <div class="mb-8">
+      <div class="max-w-xs">
+        <mat-select
+          label="Select output feature"
+          class="border-b border-solid border-gray-300"
+          [(value)]="bivariateReport"
+          (selectionChange)="changeSelectedBivariateReport($event.value)"
+        >
+          <mat-option *ngFor="let biReport of reports" [value]="biReport"
+            >{{ biReport.feature_2 }}</mat-option
+          >
+        </mat-select>
+      </div>
+    </div>
+
+    <ng-container *ngIf="bivariateReport">
+      <div class="flex relative">
+        <div class="w-full">
+          <div>
+            <drift-heatmap
+              *ngIf="productionHeatmapConfig"
+              (hoveredItem)="handleHoverItem($event)"
+              [config]="productionHeatmapConfig"
+            ></drift-heatmap>
+          </div>
+          <div class="mt-8">
+            <drift-heatmap
+              *ngIf="trainingHeatmapConfig"
+              (hoveredItem)="handleHoverItem($event)"
+              [config]="trainingHeatmapConfig"
+            ></drift-heatmap>
+          </div>
+        </div>
+        <div
+          class="bivarite-report__tooltip"
+          *ngIf="tooltip"
+          [ngStyle]="{ left: tooltip.left + 'px', top: tooltip.top + 'px' }"
+        >
+          <table>
+            <tr>
+              <td>{{ tooltip.xAxis }}</td>
+              <td>{{ tooltip.xValue }}</td>
+            </tr>
+            <tr>
+              <td>{{ tooltip.yAxis }}</td>
+              <td>{{ tooltip.yValue }}</td>
+            </tr>
+            <tr>
+              <td
+                class="bivarite-report__tooltip-label bivarite-report__tooltip-label--prod"
+              >
+                Production
+              </td>
+              <td class="bivarite-report__tooltip-value">
+                {{ tooltip.productionValue }}
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="bivarite-report__tooltip-label bivarite-report__tooltip-label--train"
+              >
+                Training
+              </td>
+              <td class="bivarite-report__tooltip-value">
+                {{ tooltip.trainingValue }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <drift-bivariate-report-legend></drift-bivariate-report-legend>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

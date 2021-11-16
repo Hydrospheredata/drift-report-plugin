@@ -1,0 +1,13 @@
+@import url(../../../styles.scss);
+
+.report__warning {
+  @apply flex items-center rounded-full bg-gray-100 p-1.5;
+
+  &:not(:last-child) {
+    @apply mb-3;
+  }
+}
+
+.mat-select-value {
+  width: 50%;
+}

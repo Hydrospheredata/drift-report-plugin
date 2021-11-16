@@ -1,0 +1,61 @@
+<div *ngIf="perFeatureReport">
+  <div class="mb-8">
+    <div class="max-w-xs">
+      <div class="text-xs font-bold">
+        Select a feature for a profile comparison:
+      </div>
+      <mat-select class="border-b border-solid border-gray-400" [(value)]="selectedFeatureReport" label="Choose feature">
+        <mat-option *ngFor="let featureReport of perFeatureReport | keyvalue" [value]="featureReport.value">
+          <div class="flex justify-between items-center">
+            <span>{{ featureReport.key }}</span>
+            <span class="text-sm">
+              <drift-drift-status [drift]="featureReport.value['drift-probability']">
+              </drift-drift-status>
+            </span>
+          </div>
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+  <div class="mb-8">
+    <drift-histogram [config]="selectedFeatureReport.histogram"></drift-histogram>
+  </div>
+
+  <div class="mb-8">
+    <div class="font-bold mb-2">Statistics</div>
+    <div class="border-2 border-solid border-gray-400 rounded text-sm overflow-auto">
+      <table mat-table class="w-full" [dataSource]="selectedFeatureReport.statistics | keyvalue">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> name </th>
+          <td mat-cell *matCellDef="let statistic"> {{statistic.key}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="training data">
+          <th mat-header-cell *matHeaderCellDef> training data </th>
+          <td mat-cell *matCellDef="let statistic"> {{statistic.value.training}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="production data">
+          <th mat-header-cell *matHeaderCellDef> production data </th>
+          <td mat-cell *matCellDef="let statistic"> {{statistic.value.deployment}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="change's status">
+          <th mat-header-cell *matHeaderCellDef> change's status </th>
+          <td
+            mat-cell
+            *matCellDef="let statistic"
+            class="statistics__drift"
+            [ngClass]="{
+              'statistics__drift--changed': statistic.value.has_changed
+            }"
+          > {{statistic.value.message}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+      </table>
+    </div>
+  </div>
+  <drift-bivariate-report [bivariateReports]="selectedFeatureReport.bivariate_reports"></drift-bivariate-report>
+</div>

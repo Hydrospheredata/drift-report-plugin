@@ -1,0 +1,25 @@
+<div class="px-6 py-4">
+  <div class="mb-2">
+    <hs-icon
+      class="w-5 h-5 text-gray-500 cursor-pointer"
+      name="icon_left"
+      [routerLink]="['/', 'models', modelName$ | async, modelVersion$ | async]"
+    >
+    </hs-icon>
+  </div>
+  <div class="font-bold py-2 text-gray-900">Reports</div>
+  <mat-table [dataSource]="reports$ | async" class="rounded-md shadow-lg bg-white mt-3">
+    <ng-container matColumnDef="batch">
+      <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="cursor-pointer hover:bg-gray-100 duration-150">
+        {{ element.filename }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      [routerLink]="encode(row.filename)"
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+  </mat-table>
+</div>
