@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { DriftReportRoutingModule } from './drift-report-routing.module';
-import { HttpClientModule } from '@angular/common/http';
 import { DriftReportComponent } from './drift-report.component';
 import {
   BivariateReportLegendComponent,
@@ -11,11 +9,9 @@ import {
   HistogramComponent,
 } from './components';
 import { ColorByDriftDirective } from './directives';
-import { MdlSelectModule } from '@angular-mdl/select';
-import { FormsModule } from '@angular/forms';
 import { BivariateReportComponent } from './components/bivariate-report/bivariate-report.component';
-import { DriftReportStore } from './state/drift-report.store';
-import { DriftReportQuery } from './state/drift-report.query';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import {
   hsIconsCheck,
   hsIconsIconErrorOutline,
@@ -24,9 +20,11 @@ import {
   HsUiKitModule,
   IconsRegistryService,
 } from '@hydrosphere/hs-ui-kit';
+import { MdlSelectModule } from '@angular-mdl/select';
+import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { DriftReportHttpService } from './drift-report-http.service';
+import { ReportsHttpService } from '../reports/reports-http.service';
 
 @NgModule({
   declarations: [
@@ -49,12 +47,7 @@ import { DriftReportHttpService } from './drift-report-http.service';
     MatSelectModule,
     MatTableModule,
   ],
-  providers: [
-    DriftReportStore,
-    DriftReportQuery,
-    IconsRegistryService,
-    DriftReportHttpService,
-  ],
+  providers: [IconsRegistryService, ReportsHttpService],
 })
 export class DriftReportModule {
   constructor(private iconRegistry: IconsRegistryService) {

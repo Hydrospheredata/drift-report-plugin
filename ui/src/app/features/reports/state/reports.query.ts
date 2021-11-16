@@ -1,22 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Query } from '@datorama/akita';
+import { combineQueries, Query } from '@datorama/akita';
 import { ReportsStore, ReportsState } from './reports.store';
+import { Observable } from 'rxjs';
+import { RouterQuery } from '@datorama/akita-ng-router-store';
+import { map, pluck } from 'rxjs/operators';
+import { Report } from '../models/reports';
+import { DriftReport } from '../../drift-report/models';
 
 @Injectable()
 export class ReportsQuery extends Query<ReportsState> {
-  constructor(protected store: ReportsStore) {
+  reports$ = this.select((s) => s.reports);
+
+  constructor(protected store: ReportsStore, private routerQuery: RouterQuery) {
     super(store);
   }
 
-  // getError() {
-  //   return this.select((state) => state.error);
-  // }
-
-  getReports() {
-    return this.select((state) => state.reports);
+  selectCurrentReport(): Observable<Report | undefined> {
+    return combineQueries([
+      this.reports$,
+      this.routerQuery.selectParams('fileName'),
+    ]).pipe(
+      map(([reports, filename]) => {
+        const name = decodeURIComponent(filename);
+        return reports.find(
+          (report: { filename: string }) => (report.filename = name)
+        );
+      })
+    );
   }
 
-  // getLoading() {
-  //   return this.select((state) => state.loading);
-  // }
+  selectCurrentDriftReport(): Observable<DriftReport> {
+    return this.selectCurrentReport().pipe(pluck('report'));
+  }
 }

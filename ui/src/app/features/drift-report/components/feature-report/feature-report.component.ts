@@ -13,17 +13,17 @@ import { FeatureReport, DriftReport } from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeatureReportComponent implements OnInit {
-  @Input() perFeatureReport: DriftReport['per_feature_report'] | undefined;
+  @Input() perFeatureReport!: DriftReport['per_feature_report'];
   selectedFeatureReport!: FeatureReport;
-  statistics!: {
-    [statisticName: string]: {
-      change_probability?: number | undefined;
-      deployment: string | number | string[] | number[];
-      training: string | number | string[] | number[];
-      message: string;
-      has_changed: boolean;
-    };
-  };
+  // statistics!: {
+  //   [statisticName: string]: {
+  //     change_probability?: number | undefined;
+  //     deployment: string | number | string[] | number[];
+  //     training: string | number | string[] | number[];
+  //     message: string;
+  //     has_changed: boolean;
+  //   };
+  // };
   columnsToDisplay = [
     'name',
     'training data',

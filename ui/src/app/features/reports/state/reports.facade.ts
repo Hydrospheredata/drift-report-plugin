@@ -20,12 +20,10 @@ export class ReportsFacade {
       .selectParams(['modelName', 'modelVersion'])
       .pipe(
         switchMap(([modelName, modelVersion]) => {
-          // this.store.update({ loading: true });
           return this.service
             .getReports({ model_name: modelName, model_version: modelVersion })
             .pipe(
-              catchError((error) => {
-                // this.store.update({ error, loading: false });
+              catchError(() => {
                 return of(null);
               })
             );

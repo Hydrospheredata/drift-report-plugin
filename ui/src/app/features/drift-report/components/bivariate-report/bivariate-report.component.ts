@@ -8,7 +8,7 @@ import { toHeatmapData } from '../../utils/to-heatmap-data';
   styleUrls: ['./bivariate-report.component.scss'],
 })
 export class BivariateReportComponent {
-  @Input() set bivariateReports(reports: BivariateReport[]) {
+  @Input() set bivariateReports(reports: BivariateReport[] | undefined) {
     this.productionHeatmapConfig = {
       data: [],
       xAxisName: '',
@@ -25,24 +25,29 @@ export class BivariateReportComponent {
     };
 
     if (this.bivariateReport) {
-      const biReport = reports.find(
-        (r) => r.feature_2 === this.bivariateReport.feature_2
-      );
+      let biReport: BivariateReport | undefined;
+      if (reports) {
+        biReport = reports.find(
+          (r) => r.feature_2 === this.bivariateReport.feature_2
+        );
+      }
       if (biReport) {
         this.changeSelectedBivariateReport(biReport);
       }
     }
 
     this.reports = reports;
-    if (this.bivariateReport === undefined && this.reports.length) {
-      this.changeSelectedBivariateReport(this.reports[0]);
+    if (this.reports) {
+      if (this.bivariateReport === undefined && this.reports.length) {
+        this.changeSelectedBivariateReport(this.reports[0]);
+      }
     }
   }
 
   @ViewChild('tooltipEl', { read: ElementRef, static: true })
   tooltipEl!: ElementRef;
 
-  reports: BivariateReport[] = [];
+  reports: BivariateReport[] | undefined = [];
   bivariateReport!: BivariateReport;
   productionHeatmapConfig!: HeatmapConfig;
   trainingHeatmapConfig!: HeatmapConfig;

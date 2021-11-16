@@ -6,7 +6,7 @@ import { HttpService } from '../http.service';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class DriftReportHttpService {
+export class ReportsHttpService {
   constructor(
     private readonly http: HttpService,
     private routerQuery: RouterQuery
@@ -23,21 +23,16 @@ export class DriftReportHttpService {
       switchMap((shellUrlWithBaseHref: string) => {
         if (shellUrlWithBaseHref) {
           return this.http.get<T>(
-            `${shellUrlWithBaseHref}/api/v1/plugin-proxy/data_drift/api/${url}`,
-            params
+            `${shellUrlWithBaseHref}plugin-proxy/data_drift/api/${url}`,
+            { params }
           );
         } else {
-          if (environment.production) {
-            const { protocol, hostname } = window.location;
-            return this.http.get<T>(`${protocol}//${hostname}/${url}`, params);
-          } else {
-            return this.http.get<T>(
-              `${environment.host}${
-                environment.port ? ':' + environment.port : ''
-              }/${url}`,
-              params
-            );
-          }
+          return this.http.get<T>(
+            `${environment.host}${
+              environment.port ? ':' + environment.port : ''
+            }/${url}`,
+            { params }
+          );
         }
       })
     );

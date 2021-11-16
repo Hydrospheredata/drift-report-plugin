@@ -6,7 +6,7 @@ import ReportsComponent from './reports.component';
 const routes: Routes = [
   { path: '', component: ReportsComponent },
   {
-    path: 'drift-report',
+    path: ':fileName',
     component: DriftReportComponent,
     loadChildren: () =>
       import('../drift-report/drift-report.module').then(

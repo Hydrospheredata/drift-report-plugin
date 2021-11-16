@@ -57,6 +57,16 @@ module.exports = {
           strictVersion: true,
           requiredVersion: "auto",
         },
+        "@datorama/akita-ng-router-store": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto",
+        },
+        "@angular/material": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto",
+        },
 
         ...sharedMappings.getDescriptors(),
       }),

@@ -20,7 +20,7 @@ import { FeatureReportHistogram } from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistogramComponent implements OnChanges, AfterViewInit {
-  @Input() config!: FeatureReportHistogram;
+  @Input() config: FeatureReportHistogram | undefined;
   @ViewChild('anchor', { read: ElementRef, static: true }) anchor!: ElementRef;
   private chart!: Chart;
 
@@ -43,8 +43,8 @@ export class HistogramComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const bins = this.config.bins as string[];
-    const deployment = this.config.deployment;
+    const bins = this.config!.bins as string[];
+    const deployment = this.config!.deployment;
     const [trainingColor, productionColor] =
       this.colorPalette.getComplementaryColors();
     this.chart = Highcharts.chart(this.anchor.nativeElement, {
@@ -80,7 +80,7 @@ export class HistogramComponent implements OnChanges, AfterViewInit {
         },
       },
       xAxis: {
-        categories: this.config.bins as string[],
+        categories: this.config!.bins as string[],
         labels: {
           format: '{value:,.5f}',
         },
@@ -89,14 +89,14 @@ export class HistogramComponent implements OnChanges, AfterViewInit {
         {
           type: 'column',
           name: 'Training Data',
-          data: this.config.training,
+          data: this.config!.training,
           color: trainingColor,
           opacity: 0.8,
         },
         {
           type: 'column',
           name: 'Production Data',
-          data: this.config.deployment,
+          data: this.config!.deployment,
           color: productionColor,
           opacity: 0.8,
         },

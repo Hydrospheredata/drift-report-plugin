@@ -1,10 +1,8 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ReportsFacade } from './state/reports.facade';
-import { Observable } from 'rxjs';
-import { Reports } from './models/reports';
 import { ReportsQuery } from './state/reports.query';
 import { ReportsService } from './state/reports.service';
-import { HttpClient } from '@angular/common/http';
+import { RouterQuery } from '@datorama/akita-ng-router-store';
 
 @Component({
   selector: 'drift-reports',
@@ -13,16 +11,21 @@ import { HttpClient } from '@angular/common/http';
   providers: [ReportsFacade, ReportsService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class ReportsComponent implements OnInit {
-  reports$!: Observable<Reports>;
-  constructor(private facade: ReportsFacade, private query: ReportsQuery, private http: HttpClient) {}
+export default class ReportsComponent {
+  reports$ = this.query.reports$;
+  modelName$ = this.routerQuery.selectParams('modelName');
+  modelVersion$ = this.routerQuery.selectParams('modelVersion');
+
+  constructor(
+    private facade: ReportsFacade,
+    private query: ReportsQuery,
+    private routerQuery: RouterQuery
+  ) {
+    this.facade.loadReports();
+  }
   displayedColumns: string[] = ['batch'];
 
-  // reports: Report[] = [{ batch: 'batch_1.csv' }];
-
-  ngOnInit() {
-    this.reports$ = this.query.getReports();
-
-    this.facade.loadReports();
+  encode(url: any) {
+    return encodeURIComponent(url);
   }
 }
