@@ -104,19 +104,8 @@ service DataStorageService {
 }
 
 message GetInferenceDataUpdatesRequest {
-  message InitialRequest {
-    string plugin_id = 1;
-    bool reset_index = 2;
-  }
-
-  message Ack {
-    string plugin_id = 1;
-    repeated string inference_data_objs = 2;
-  }
-  oneof data {
-    InitialRequest init = 1;
-    Ack ack = 2;
-  }
+  string plugin_id = 1;
+  AnalyzedAck ack = 2;
 }
 
 message GetInferenceDataUpdatesResponse {
@@ -125,7 +114,37 @@ message GetInferenceDataUpdatesResponse {
   repeated string inference_data_objs = 3;
 }
 
-message ModelId{
+message ModelId {
   string model_name = 1;
   uint64 model_version = 2;
+}
+
+message AnalyzedAck {
+  string model_name = 1;
+  uint64 model_version = 2;
+  string inference_data_obj = 3;
+  repeated RowReport row_reports = 4;
+  map<string, FeatureReport> feature_reports = 5;
+}
+
+message RowReport {
+  uint64 row_id = 1;
+  string col = 2;
+  string description = 3;
+  bool is_good = 4;
+  oneof value {
+    int64 int_val = 10;
+    string string_val = 11;
+    double double_val = 12;
+    bool bool_val = 13;
+  }
+}
+
+message FeatureReport {
+  repeated FRRow rows = 1;
+}
+
+message FRRow {
+  string description = 1;
+  bool is_good = 2;
 }
