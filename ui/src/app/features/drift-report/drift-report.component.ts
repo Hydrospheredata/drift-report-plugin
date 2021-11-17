@@ -12,7 +12,7 @@ import { ReportsQuery } from '../reports/state/reports.query';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DriftReportComponent implements OnInit {
-  drift$!: Observable<DriftReport | null>;
+  drift$!: Observable<DriftReport | undefined>;
   modelName$ = this.routerQuery.selectParams('modelName');
   modelVersion$ = this.routerQuery.selectParams('modelVersion');
 

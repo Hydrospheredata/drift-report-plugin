@@ -4,7 +4,6 @@ import { ReportsStore, ReportsState } from './reports.store';
 import { Observable } from 'rxjs';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { map, pluck } from 'rxjs/operators';
-import { Report } from '../models/reports';
 import { DriftReport } from '../../drift-report/models';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class ReportsQuery extends Query<ReportsState> {
     super(store);
   }
 
-  selectCurrentReport(): Observable<Report | undefined> {
+  selectCurrentDriftReport(): Observable<DriftReport | undefined> {
     return combineQueries([
       this.reports$,
       this.routerQuery.selectParams('fileName'),
@@ -23,13 +22,10 @@ export class ReportsQuery extends Query<ReportsState> {
       map(([reports, filename]) => {
         const name = decodeURIComponent(filename);
         return reports.find(
-          (report: { filename: string }) => (report.filename = name)
+          (report: { filename: string }) => report.filename === name
         );
-      })
+      }),
+      pluck('report')
     );
-  }
-
-  selectCurrentDriftReport(): Observable<DriftReport> {
-    return this.selectCurrentReport().pipe(pluck('report'));
   }
 }
