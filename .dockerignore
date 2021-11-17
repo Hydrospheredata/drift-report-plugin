@@ -1,3 +1,6 @@
+*docker-compose.yml
+demo/
+Makefile
 venv/
 .idea/
 __pycache__
