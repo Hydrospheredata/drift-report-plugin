@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package monitoring_manager;
 
+import "google/protobuf/timestamp.proto";
+
 message ModelSignature {
   repeated ModelField inputs = 2;
   repeated ModelField outputs = 3;
@@ -58,9 +60,7 @@ enum DataProfileType {
   TEXT = 6;
 }
 
-message TensorShape {
-  repeated int64 dims = 1;
-};
+message TensorShape { repeated int64 dims = 1; };
 
 // === END OF contract modeling ===
 
@@ -71,36 +71,35 @@ service PluginManagementService {
 message RegisterPluginRequest {
   string plugin_id = 1;
   // PLUGIN FRONTEND FIELDS
-//  string iconUrl = 2;
+  //  string iconUrl = 2;
   string description = 3;
   string routePath = 5;
   string ngModuleName = 6;
-//  string remoteEntry = 7;
+  //  string remoteEntry = 7;
   string remoteName = 8;
   string exposedModule = 9;
   // END OF PLUGIN FRONTEND FIELDS
   string addr = 10;
 }
 
-message RegisterPluginResponse {
-}
+message RegisterPluginResponse {}
 
 service ModelCatalogService {
-  rpc GetModelUpdates(GetModelUpdatesRequest) returns (stream GetModelUpdatesResponse);
+  rpc GetModelUpdates(GetModelUpdatesRequest)
+      returns (stream GetModelUpdatesResponse);
 }
 
-message GetModelUpdatesRequest {
-  string plugin_id = 1;
-}
+message GetModelUpdatesRequest { string plugin_id = 1; }
 
 message GetModelUpdatesResponse {
   ModelId model = 1;
   ModelSignature signature = 2;
-  repeated string training_data_objs = 3;
+  repeated DataObject training_data_objs = 3;
 }
 
 service DataStorageService {
-  rpc GetInferenceDataUpdates (stream GetInferenceDataUpdatesRequest) returns (stream GetInferenceDataUpdatesResponse);
+  rpc GetInferenceDataUpdates(stream GetInferenceDataUpdatesRequest)
+      returns (stream GetInferenceDataUpdatesResponse);
 }
 
 message GetInferenceDataUpdatesRequest {
@@ -111,7 +110,7 @@ message GetInferenceDataUpdatesRequest {
 message GetInferenceDataUpdatesResponse {
   ModelId model = 1;
   ModelSignature signature = 2;
-  repeated string inference_data_objs = 3;
+  repeated DataObject inference_data_objs = 3;
 }
 
 message ModelId {
@@ -122,7 +121,7 @@ message ModelId {
 message AnalyzedAck {
   string model_name = 1;
   uint64 model_version = 2;
-  string inference_data_obj = 3;
+  DataObject inference_data_obj = 3;
   repeated RowReport row_reports = 4;
   map<string, FeatureReport> feature_reports = 5;
 }
@@ -140,11 +139,14 @@ message RowReport {
   }
 }
 
-message FeatureReport {
-  repeated FRRow rows = 1;
-}
+message FeatureReport { repeated FRRow rows = 1; }
 
 message FRRow {
   string description = 1;
   bool is_good = 2;
+}
+
+message DataObject {
+  string key = 1;
+  google.protobuf.Timestamp lastModifiedAt = 2;
 }

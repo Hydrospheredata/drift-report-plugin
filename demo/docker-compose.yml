@@ -1,7 +1,7 @@
 version: "0.1"
 services:
   shell-ui:
-    image: hydrosphere/shell-ui:latest 
+    image: hydrosphere/shell-ui:latest
     ports:
       - "4200:8080"
 
@@ -11,8 +11,6 @@ services:
       - "POSTGRES_PASSWORD=root"
       - "POSTGRES_USER=root"
       - "POSTGRES_DB=monitoring"
-    #ports:
-      #- "5432:5432"
 
   minio:
     image: minio/minio
@@ -22,7 +20,7 @@ services:
     command: "server /data --console-address \":9001\""
 
   monitoring-manager:
-    image: hydrosphere/monitoring-manager:latest 
+    image: hydrosphere/monitoring-manager:latest
     depends_on:
       - db
       - minio
@@ -32,26 +30,25 @@ services:
       - "8080:8080"
       - "8081:8081"
 
-  stat-plugin:
-    image: hydrosphere/drift-report-plugin:latest
-    depends_on:
-      - monitoring-manager
-    #ports:
-      #- "5001:5001"
-    environment:
-      - "ENDPOINT_OVERRIDE=http://minio:9000"
-      - "HTTP_PORT=5000"
-      - "MANAGER_ADDR=monitoring-manager:8081"
-      - "AWS_ACCESS_KEY_ID=minioadmin"
-      - "AWS_SECRET_ACCESS_KEY=minioadmin"
-      - "SELF_ADDR=http://stat-plugin:5000"
-
+  # stat-plugin:
+  #   image: hydrosphere/drift-report-plugin:latest
+  #   depends_on:
+  #     - monitoring-manager
+  #     #ports:
+  #     #- "5001:5001"
+  #   environment:
+  #     # - "GRPC_VERBOSITY=DEBUG"
+  #     # - "GRPC_TRACE=all,-timer_check"
+  #     - "ENDPOINT_OVERRIDE=http://minio:9000"
+  #     - "HTTP_PORT=5000"
+  #     - "MANAGER_ADDR=monitoring-manager:8081"
+  #     - "AWS_ACCESS_KEY_ID=minioadmin"
+  #     - "AWS_SECRET_ACCESS_KEY=minioadmin"
+  #     - "SELF_ADDR=http://stat-plugin:5000"
   be:
     image: hydrosphere/profiler:latest
     depends_on:
       - monitoring-manager
-    #ports:
-      #- "5000:5000"
     environment:
       - "AWS_ACCESS_KEY_ID=minioadmin"
       - "AWS_SECRET_ACCESS_KEY=minioadmin"
