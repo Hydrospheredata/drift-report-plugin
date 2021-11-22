@@ -22,8 +22,8 @@ coverage.xml
 *,cover
 *.log
 tests/
-.gitignore
+**/.gitignore
 Dockerfile*
 .github
 jenkinsfile.disable.groovy
-README.md
+**/README.md
