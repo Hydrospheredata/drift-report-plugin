@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { DriftReportRoutingModule } from './drift-report-routing.module';
 import { DriftReportComponent } from './drift-report.component';
 import {
-  BivariateReportLegendComponent,
   DriftStatusComponent,
   FeatureReportComponent,
   HeatmapComponent,
   HistogramComponent,
 } from './components';
 import { ColorByDriftDirective } from './directives';
-import { BivariateReportComponent } from './components/bivariate-report/bivariate-report.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
@@ -33,8 +31,6 @@ import { ReportsHttpService } from '../reports/reports-http.service';
     ColorByDriftDirective,
     DriftStatusComponent,
     HistogramComponent,
-    BivariateReportComponent,
-    BivariateReportLegendComponent,
     HeatmapComponent,
   ],
   imports: [
