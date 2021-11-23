@@ -1,4 +1,4 @@
-name: Build & Push Image
+name: Test, Build & Push Image
 
 on:
   push:
@@ -6,9 +6,21 @@ on:
       - master
 
 jobs:
-  Build_Push:
+  Test:
     runs-on: ubuntu-20.04
 
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Run Python Tests
+        uses: ./.github/actions/tests
+        with:
+          python-version: 3.8
+
+  Build_Push:
+    needs: Test
+    runs-on: ubuntu-20.04
     env:
       IMAGE: drift-report-plugin # name of the built image
       REGISTRY: hydrosphere
@@ -52,6 +64,7 @@ jobs:
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
       - name: Move cache
+        shell: bash
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache

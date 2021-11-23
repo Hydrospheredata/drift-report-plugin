@@ -1,3 +1,0 @@
-[submodule "ui"]
-	path = ui
-	url = git@github.com:Hydrospheredata/hydroserving-drift-report-ui.git
