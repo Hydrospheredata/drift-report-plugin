@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from typing import List
 
@@ -45,6 +46,7 @@ def signature():
 def adult_report(training_data, signature):
     report = StatisticalReport(
         filename="test",
+        file_timestamp=datetime.now(),
         model_name="model",
         model_version=1,
         signature=signature,
@@ -61,6 +63,7 @@ def check_heatmap_integirty(h: HeatMapData):
 
 def test_report_processing(adult_report: StatisticalReport):
     adult_report.process()
+    print(adult_report.to_proto())
     print(adult_report.to_json())
 
 
