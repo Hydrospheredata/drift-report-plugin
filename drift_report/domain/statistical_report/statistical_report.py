@@ -2,6 +2,8 @@ from datetime import datetime
 import json
 from itertools import product
 from typing import List
+from fsspec.asyn import get_loop
+from google.protobuf.timestamp_pb2 import Timestamp
 
 import numpy as np
 import pandas as pd
@@ -126,11 +128,14 @@ class StatisticalReport:
             )
             for report in self.feature_reports
         }
+        modifiedAt = Timestamp()
+        modifiedAt.FromDatetime(self.file_timestamp)
         ack = AnalyzedAck(
             model_name=self.model_name,
             model_version=self.model_version,
             inference_data_obj=DataObject(
-                key=self.filename, lastModifiedAt=self.file_timestamp
+                key=self.filename,
+                lastModifiedAt=modifiedAt,
             ),
             feature_reports=feature_reports,
         )

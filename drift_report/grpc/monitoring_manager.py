@@ -78,7 +78,7 @@ class MonitoringDataSubscriber:
 
                         report = StatisticalReport(
                             filename=inference_path,
-                            file_timestamp=data_obj.lastModifiedAt,
+                            file_timestamp=data_obj.lastModifiedAt.ToDatetime(),
                             model_name=model.name,
                             model_version=model.version,
                             signature=model.signature,
