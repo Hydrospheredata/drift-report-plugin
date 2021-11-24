@@ -1,11 +1,21 @@
+from datetime import datetime
 import json
 from itertools import product
 from typing import List
+from fsspec.asyn import get_loop
+from google.protobuf.timestamp_pb2 import Timestamp
 
 import numpy as np
 import pandas as pd
 
-from drift_report.proto.monitoring_manager_pb2 import ModelSignature, ModelField
+from drift_report.proto.monitoring_manager_pb2 import (
+    DataObject,
+    ModelSignature,
+    ModelField,
+    AnalyzedAck,
+    FRRow,
+    FeatureReport as protoFeatureReport,
+)
 from drift_report.domain.statistical_report.statistical_feature_report import (
     StatisticalFeatureReport,
     FeatureReportFactory,
@@ -27,6 +37,7 @@ class StatisticalReport:
     def __init__(
         self,
         filename: str,
+        file_timestamp: datetime,
         model_name: str,
         model_version: int,
         signature: ModelSignature,
@@ -36,6 +47,7 @@ class StatisticalReport:
         self.model_name = model_name
         self.model_version = model_version
         self.filename = filename
+        self.file_timestamp = file_timestamp
         self.__is_processed = False
 
         # Drop columns with all NANs from production and training data
@@ -91,6 +103,7 @@ class StatisticalReport:
 
         numpy_json = {
             "filename": self.filename,
+            "file_timestamp": str(self.file_timestamp),
             "model_name": self.model_name,
             "model_version": self.model_version,
             "report": {
@@ -104,6 +117,29 @@ class StatisticalReport:
             numpy_json, cls=NumpyArrayEncoder
         )  # use dump() to write array into file
         return json.loads(encoded_numpy_json)
+
+    def to_proto(self) -> AnalyzedAck:
+        feature_reports = {
+            report.feature_name: protoFeatureReport(
+                rows=[
+                    FRRow(is_good=not bool(test.has_changed), description=test.message)
+                    for test in report.tests
+                ]
+            )
+            for report in self.feature_reports
+        }
+        modifiedAt = Timestamp()
+        modifiedAt.FromDatetime(self.file_timestamp)
+        ack = AnalyzedAck(
+            model_name=self.model_name,
+            model_version=self.model_version,
+            inference_data_obj=DataObject(
+                key=self.filename,
+                lastModifiedAt=modifiedAt,
+            ),
+            feature_reports=feature_reports,
+        )
+        return ack
 
     def __per_feature_report(self):
         return dict(

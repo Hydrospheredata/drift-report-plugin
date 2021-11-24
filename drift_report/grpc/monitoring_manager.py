@@ -1,3 +1,4 @@
+import logging
 import pandas
 import threading
 import grpc
@@ -19,6 +20,7 @@ from drift_report.proto.monitoring_manager_pb2 import (
     GetModelUpdatesRequest,
     GetInferenceDataUpdatesRequest,
 )
+import queue
 
 s3 = s3fs.S3FileSystem(client_kwargs={"endpoint_url": CONFIG.endpoint_override})
 
@@ -42,52 +44,75 @@ class MonitoringDataSubscriber:
         self.model_repo = model_repository
 
     def watch_inference_data(self):
-        init_req = GetInferenceDataUpdatesRequest.InitialRequest(
-            plugin_id=self.plugin_name
-        )
-        req = GetInferenceDataUpdatesRequest(init=init_req)
-        reqs = iter([req])
+        ack_queue = queue.Queue(100)
+        init_req = GetInferenceDataUpdatesRequest(plugin_id=self.plugin_name)
+        ack_queue.put(init_req)
+
+        def qgetter():
+            item = ack_queue.get()
+            print("Sending message to the manager")
+            return item
+
+        reqs = iter(qgetter, None)
 
         for response in self.data_stub.GetInferenceDataUpdates(reqs):
-            print("Prishli dannye")
-            print(response)
-            inference_path = response.inference_data_objs[0]
-            inference_data = pandas.read_csv(
-                s3.open(
-                    inference_path,
-                    mode="rb",
-                )
-            )
+            try:
+                print("Got inference data")
+                print(response)
 
-            model = self.model_repo.find(
-                response.model.model_name, response.model.model_version
-            )
-            if model:
-                training_data = pandas.read_csv(s3.open(model.training_data, mode="rb"))
-                report = StatisticalReport(
-                    inference_path,
-                    model.name,
-                    model.version,
-                    model.signature,
-                    training_data,
-                    inference_data,
+                model = self.model_repo.find(
+                    response.model.model_name, response.model.model_version
                 )
-                report.process()
-                self.report_repo.create(report)
+                if model:
+                    training_data = pandas.read_csv(
+                        s3.open(model.training_data, mode="rb")
+                    )
+                    for data_obj in response.inference_data_objs:
+                        inference_path = data_obj.key
+                        inference_data = pandas.read_csv(
+                            s3.open(
+                                inference_path,
+                                mode="rb",
+                            )
+                        )
+
+                        report = StatisticalReport(
+                            filename=inference_path,
+                            file_timestamp=data_obj.lastModifiedAt.ToDatetime(),
+                            model_name=model.name,
+                            model_version=model.version,
+                            signature=model.signature,
+                            training_data=training_data,
+                            production_data=inference_data,
+                        )
+                        report.process()
+                        self.report_repo.create(report)
+                        ack = report.to_proto()
+                        ack_resp = GetInferenceDataUpdatesRequest(
+                            plugin_id=self.plugin_name, ack=ack
+                        )
+                        print(f"adding ack to the queue: {ack_resp}")
+                        ack_queue.put(ack_resp)
+                        print(f"queue size: {ack_queue.qsize()}")
+            except Exception:
+                logging.exception("Error while handling inference data event")
 
     def watch_models(self):
         req = GetModelUpdatesRequest(plugin_id=self.plugin_name)
         for response in self.model_stub.GetModelUpdates(req):
-            training_data_url = response.training_data_objs[0]
-            print("Prishla model")
-            print(training_data_url)
-            model = Model(
-                name=response.model.model_name,
-                version=response.model.model_version,
-                signature=response.signature,
-                training_data=response.training_data_objs[0],
-            )
-            self.model_repo.create(model)
+            try:
+                training_data_url = response.training_data_objs[0].key
+                print("Prishla model")
+                print(training_data_url)
+                model = Model(
+                    name=response.model.model_name,
+                    version=response.model.model_version,
+                    signature=response.signature,
+                    training_data=training_data_url,
+                )
+                self.model_repo.create(model)
+            except Exception:
+                logging.exception("Error while handling model event")
 
     def start_watching(self):
         print("Starting inference data monitor")
