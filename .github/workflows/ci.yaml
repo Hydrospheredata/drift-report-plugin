@@ -30,6 +30,9 @@ jobs:
   Build_image:
     runs-on: ubuntu-20.04
     name: "Build Image"
+    env:
+      IMAGE: drift-report-plugin # name of the built image
+      REGISTRY: hydrosphere
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
