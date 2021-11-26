@@ -2,7 +2,6 @@ from datetime import datetime
 import json
 from itertools import product
 from typing import List
-from fsspec.asyn import get_loop
 from google.protobuf.timestamp_pb2 import Timestamp
 
 import numpy as np
@@ -31,6 +30,18 @@ def common_fields(signature: List[ModelField], training_columns, production_colu
         .intersection(set(production_columns))
     )
     return [field for field in signature if field.name in common_field_names]
+
+
+def field_to_report(
+    field: ModelField, training_data: pd.DataFrame, production_data: pd.DataFrame
+):
+    return FeatureReportFactory.get_feature_report(
+        feature_name=field.name,
+        feature_dtype=field.dtype,
+        training_data=training_data[field.name],
+        production_data=production_data[field.name],
+        feature_profile=field.profile,
+    )
 
 
 class StatisticalReport:
@@ -63,22 +74,12 @@ class StatisticalReport:
         )
 
         input_feature_reports = [
-            FeatureReportFactory.get_feature_report(
-                field.name,
-                field.dtype,
-                training_data[field.name],
-                production_data[field.name],
-            )
+            field_to_report(field, training_data, production_data)
             for field in common_input_fields
         ]
 
         output_feature_reports = [
-            FeatureReportFactory.get_feature_report(
-                field.name,
-                field.dtype,
-                training_data[field.name],
-                production_data[field.name],
-            )
+            field_to_report(field, training_data, production_data)
             for field in common_output_fields
         ]
 
