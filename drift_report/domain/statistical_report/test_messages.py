@@ -7,27 +7,28 @@ def threshold_to_apa_style(t: float):
 
 def mean_test_message(test: StatisticalTest):
     if test.has_changed:
-        return f"Significant change in the mean, p<{threshold_to_apa_style(test.threshold)}"
+        return "Significant change in the mean"
     else:
         return "No significant change in the mean"
-    
+
+
 def distribution_test_message(test: StatisticalTest):
     if test.has_changed:
-        return f"Significant change in the distribution, p<{threshold_to_apa_style(test.threshold)}"
+        return "Significant change in the distribution"
     else:
         return "No significant change in the distribution"
 
 
 def variance_test_message(test: StatisticalTest):
     if test.has_changed:
-        return f"Significant change in the variance, p<{threshold_to_apa_style(test.threshold)}"
+        return "Significant change in the variance"
     else:
         return "No significant change in the variance"
 
 
 def median_test_message(test: StatisticalTest):
     if test.has_changed:
-        return f"Significant change in the median, p<{threshold_to_apa_style(test.threshold)}"
+        return "Significant change in the median"
     else:
         return "No significant change in the median"
 
@@ -44,7 +45,7 @@ def unique_values_test_message(test: StatisticalTest):
 
 def chi_square_message(test: StatisticalTest):
     if test.has_changed:
-        return f"Production categorical data has different frequencies at p<{threshold_to_apa_style(test.threshold)}"
+        return "Production categorical data has different frequencies"
     else:
         return (
             "Difference between training and production frequencies are not significant"
