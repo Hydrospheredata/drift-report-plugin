@@ -2,16 +2,11 @@
 FROM node:14.16.1 AS static-fe
 WORKDIR /frontend
 
-RUN apt-get update && apt-get install -y --no-install-recommends git && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY ui/package.json ui/package-lock.json ./
 RUN npm install
 
 COPY ui ./
 RUN npm run build
-RUN ls
-
 
 
 FROM python:3.8.12-slim-bullseye as python-base
@@ -31,7 +26,6 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
     libssl1.1>=1.1.1 \
     openssl>=1.1.1 && \
     rm -rf /var/lib/apt/lists/*
-
 
 
 FROM python-base AS build
@@ -54,11 +48,6 @@ RUN apt-get update && \
 COPY ./poetry.lock  ./pyproject.toml ./
 RUN poetry install --no-interaction --no-ansi -vvv
 
-ARG GIT_HEAD_COMMIT
-ARG GIT_CURRENT_BRANCH
-COPY . ./
-
-
 
 FROM python-base as runtime
 RUN useradd -u 42069 --create-home --shell /bin/bash app
@@ -67,8 +56,9 @@ USER app
 WORKDIR /app
 
 COPY --from=build $VENV_PATH $VENV_PATH
+COPY --chown=app:app ./start.sh start.sh
 COPY --chown=app:app drift_report ./drift_report
 COPY --from=static-fe --chown=app:app frontend/dist/ ./drift_report/resources/static/
-COPY --chown=app:app ./start.sh start.sh
+
 
 ENTRYPOINT ["bash", "start.sh"]
