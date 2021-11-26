@@ -1,6 +1,5 @@
 from datetime import datetime
 import json
-from itertools import product
 from typing import List
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -85,10 +84,6 @@ class StatisticalReport:
 
         input_feature_reports = list(filter(None, input_feature_reports))
         output_feature_reports = list(filter(None, output_feature_reports))
-
-        # Combine inputs and outputs to create bivariate reports inside input feature reports
-        for inp_f, out_f in product(input_feature_reports, output_feature_reports):
-            inp_f.combine(out_f)
 
         self.feature_reports: List[StatisticalFeatureReport] = (
             input_feature_reports + output_feature_reports

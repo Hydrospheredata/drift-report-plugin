@@ -1,13 +1,9 @@
 from datetime import datetime
 import os
-from typing import List
 
 import numpy as np
 import pandas as pd
 import pytest
-from drift_report.domain.statistical_report.statistical_feature_report import (
-    HeatMapData,
-)
 from drift_report.domain.statistical_report.statistical_report import StatisticalReport
 import drift_report.proto.monitoring_manager_pb2 as proto
 
@@ -56,20 +52,7 @@ def adult_report(training_data, signature):
     return report
 
 
-def check_heatmap_integirty(h: HeatMapData):
-    # All columns shoud sum up to 1 +- 0.01
-    return np.allclose(h.intensity.sum(axis=0).min(), 1, atol=0.01)
-
-
 def test_report_processing(adult_report: StatisticalReport):
     adult_report.process()
     print(adult_report.to_proto())
     print(adult_report.to_json())
-
-
-def test_heatmap_intensities(adult_report: StatisticalReport):
-    adult_report.process()
-    for fr in adult_report.feature_reports:
-        for bvr in fr.bivariate_reports:
-            assert check_heatmap_integirty(bvr.production_heatmap)
-            assert check_heatmap_integirty(bvr.training_heatmap)
