@@ -6,6 +6,16 @@ import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { map, pluck } from 'rxjs/operators';
 import { DriftReport } from '../../drift-report/models';
 
+interface PerFeatureReport {
+  [featureName: string]: { [x: string]: number };
+}
+
+interface ReportCommon {
+  report: {
+    per_feature_report: PerFeatureReport;
+  };
+}
+
 @Injectable()
 export class ReportsQuery extends Query<ReportsState> {
   reports$ = this.select((s) => s.reports);
@@ -13,6 +23,9 @@ export class ReportsQuery extends Query<ReportsState> {
   constructor(protected store: ReportsStore, private routerQuery: RouterQuery) {
     super(store);
   }
+
+  isFeatureFailed = (report: PerFeatureReport) => (feature: string) =>
+    report[feature]['drift-probability'] > 0.25;
 
   selectCurrentDriftReport(): Observable<DriftReport | undefined> {
     return combineQueries([
@@ -34,36 +47,20 @@ export class ReportsQuery extends Query<ReportsState> {
       map(
         (reports) =>
           reports &&
-          reports.map(
-            (reportCommon: {
-              report: {
-                per_feature_report: { [x: string]: { [x: string]: number } };
-              };
-            }) => {
-              const failedFeatures = Object.keys(
-                reportCommon.report.per_feature_report
-              ).filter((key) => {
-                return !(
-                  reportCommon.report.per_feature_report[key][
-                    'drift-probability'
-                  ] === 0 ||
-                  (reportCommon.report.per_feature_report[key][
-                    'drift-probability'
-                  ] &&
-                    reportCommon.report.per_feature_report[key][
-                      'drift-probability'
-                    ] <= 0.25)
-                );
-              });
-              return {
-                ...reportCommon,
-                failedFeatures,
-                featuresNumber: Object.keys(
-                  reportCommon.report.per_feature_report
-                ).length,
-              };
-            }
-          )
+          reports.map((reportCommon: ReportCommon) => {
+            const perFeatureReport = reportCommon.report.per_feature_report;
+            const featureNames = Object.keys(perFeatureReport);
+
+            const failedFeatures = featureNames.filter(
+              this.isFeatureFailed(perFeatureReport)
+            );
+
+            return {
+              ...reportCommon,
+              failedFeatures,
+              featuresNumber: featureNames.length,
+            };
+          })
       )
     );
   }

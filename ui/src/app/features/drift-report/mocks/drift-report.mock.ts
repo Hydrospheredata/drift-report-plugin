@@ -931,7 +931,7 @@ export const mockDrift2: DriftReport = {
       },
     },
     education: {
-      'drift-probability': 0.0,
+      'drift-probability': 0.25,
       histogram: {
         bins: [
           'High School grad',
