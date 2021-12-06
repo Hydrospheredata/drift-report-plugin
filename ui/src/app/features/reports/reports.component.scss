@@ -1,0 +1,10 @@
+.mat-header-cell, .mat-cell {
+  white-space: normal!important;
+  word-wrap: break-word!important;
+  word-break:break-all!important;
+}
+
+.mat-column-total-number-of-features {
+  width: 15% !important;
+  flex: 0 0 15% !important;
+}

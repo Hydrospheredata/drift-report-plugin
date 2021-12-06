@@ -11,13 +11,28 @@
   <mat-table [dataSource]="reports$ | async" class="rounded-md shadow-lg bg-white mt-3">
     <ng-container matColumnDef="batch">
       <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="cursor-pointer hover:bg-gray-100 duration-150">
+      <mat-cell *matCellDef="let element">
         {{ element.filename }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="failed features">
+      <mat-header-cell *matHeaderCellDef> failed features </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.failedFeatures }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="total number of features">
+      <mat-header-cell *matHeaderCellDef> total number of features </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.featuresNumber }}
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
+      class="cursor-pointer hover:bg-gray-100 duration-150"
       [routerLink]="encode(row.filename)"
       *matRowDef="let row; columns: displayedColumns"
     ></mat-row>
