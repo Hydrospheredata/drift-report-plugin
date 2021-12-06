@@ -28,4 +28,43 @@ export class ReportsQuery extends Query<ReportsState> {
       pluck('report')
     );
   }
+
+  selectReports() {
+    return this.reports$.pipe(
+      map(
+        (reports) =>
+          reports &&
+          reports.map(
+            (reportCommon: {
+              report: {
+                per_feature_report: { [x: string]: { [x: string]: number } };
+              };
+            }) => {
+              const failedFeatures = Object.keys(
+                reportCommon.report.per_feature_report
+              ).filter((key) => {
+                return !(
+                  reportCommon.report.per_feature_report[key][
+                    'drift-probability'
+                  ] === 0 ||
+                  (reportCommon.report.per_feature_report[key][
+                    'drift-probability'
+                  ] &&
+                    reportCommon.report.per_feature_report[key][
+                      'drift-probability'
+                    ] <= 0.25)
+                );
+              });
+              return {
+                ...reportCommon,
+                failedFeatures,
+                featuresNumber: Object.keys(
+                  reportCommon.report.per_feature_report
+                ).length,
+              };
+            }
+          )
+      )
+    );
+  }
 }

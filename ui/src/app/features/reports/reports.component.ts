@@ -12,7 +12,7 @@ import { RouterQuery } from '@datorama/akita-ng-router-store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ReportsComponent {
-  reports$ = this.query.reports$;
+  reports$ = this.query.selectReports();
   modelName$ = this.routerQuery.selectParams('modelName');
   modelVersion$ = this.routerQuery.selectParams('modelVersion');
 
@@ -23,7 +23,11 @@ export default class ReportsComponent {
   ) {
     this.facade.loadReports();
   }
-  displayedColumns: string[] = ['batch'];
+  displayedColumns: string[] = [
+    'batch',
+    'failed features',
+    'total number of features',
+  ];
 
   encode(url: any) {
     return encodeURIComponent(url);
