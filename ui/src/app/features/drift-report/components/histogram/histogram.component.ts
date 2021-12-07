@@ -108,7 +108,7 @@ export class HistogramComponent implements OnChanges, AfterViewInit {
 function chooseFormatter(
   this: any,
   bins: string | any[],
-  deployment: string | any[]
+  deployment: string | any[],
 ) {
   if (bins.length > deployment.length) {
     const binIndex = bins.indexOf(this.x);

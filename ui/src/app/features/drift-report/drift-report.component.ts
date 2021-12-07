@@ -19,7 +19,7 @@ export class DriftReportComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private query: ReportsQuery,
-    private routerQuery: RouterQuery
+    private routerQuery: RouterQuery,
   ) {}
 
   ngOnInit() {

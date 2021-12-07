@@ -9,7 +9,7 @@ export class ColorByDriftDirective implements OnInit {
 
   constructor(
     private readonly el: ElementRef,
-    private readonly colorPalette: ColorPaletteService
+    private readonly colorPalette: ColorPaletteService,
   ) {}
 
   ngOnInit(): void {

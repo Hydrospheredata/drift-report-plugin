@@ -10,7 +10,7 @@ const routes: Routes = [
     component: DriftReportComponent,
     loadChildren: () =>
       import('../drift-report/drift-report.module').then(
-        (m) => m.DriftReportModule
+        m => m.DriftReportModule,
       ),
   },
 ];

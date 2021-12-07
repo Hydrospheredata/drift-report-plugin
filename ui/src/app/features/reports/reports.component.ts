@@ -19,7 +19,7 @@ export default class ReportsComponent {
   constructor(
     private facade: ReportsFacade,
     private query: ReportsQuery,
-    private routerQuery: RouterQuery
+    private routerQuery: RouterQuery,
   ) {
     this.facade.loadReports();
   }

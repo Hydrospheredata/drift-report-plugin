@@ -110,7 +110,7 @@ export class HeatmapComponent implements OnInit {
         'transform',
         `translate(${this.margins.left}px, ${
           this.height - this.margins.bottom
-        }px)`
+        }px)`,
       );
 
     xAxisSelection
@@ -123,7 +123,7 @@ export class HeatmapComponent implements OnInit {
       .append('text')
       .attr(
         'transform',
-        'translate(' + this.width / 2 + ' ,' + (this.height - 12) + ')'
+        'translate(' + this.width / 2 + ' ,' + (this.height - 12) + ')',
       )
       .style('text-anchor', 'middle')
       .style('fill', this.axisLabelsColor)
@@ -134,7 +134,7 @@ export class HeatmapComponent implements OnInit {
       .call(yAxis)
       .style(
         'transform',
-        `translate(${this.margins.left}px, ${this.margins.top}px)`
+        `translate(${this.margins.left}px, ${this.margins.top}px)`,
       )
       .select('.domain')
       .remove();
@@ -155,24 +155,24 @@ export class HeatmapComponent implements OnInit {
       .append('g')
       .style(
         'transform',
-        `translate(${this.margins.left}px, ${this.margins.top}px)`
+        `translate(${this.margins.left}px, ${this.margins.top}px)`,
       );
 
     dataContainer
       .selectAll('rect')
       .data(config.data)
-      .join((enter) =>
+      .join(enter =>
         enter
           .append('rect')
-          .attr('x', (d) => xScale(d.x)!)
-          .attr('y', (d) => yScale(d.y)!)
+          .attr('x', d => xScale(d.x)!)
+          .attr('y', d => yScale(d.y)!)
           .attr('rx', 4)
           .attr('ry', 0)
           .attr('width', xScale.bandwidth())
           .attr('height', yScale.bandwidth())
           .style('fill', ({ value }) => getColdWarmColor(value))
           .on('mouseover', (_, d) => onMouseOver(d))
-          .on('mouseleave', onMouseLeave)
+          .on('mouseleave', onMouseLeave),
       );
   }
 
