@@ -5,7 +5,7 @@ const x = ['A', 'B', 'C', 'D'];
 const y = ['X', 'Y', 'Z', 'W'];
 
 const generateData = () => {
-  return x.map((_) => y.map(() => Math.random()));
+  return x.map(_ => y.map(() => Math.random()));
 };
 export const heatmapData: HeatmapData[] = toHeatmapData(x, y, generateData());
 export const heatmapConfig: HeatmapConfig = {

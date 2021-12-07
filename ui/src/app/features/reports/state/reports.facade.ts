@@ -12,7 +12,7 @@ export class ReportsFacade {
     private router: ActivatedRoute,
     private service: ReportsService,
     private store: ReportsStore,
-    private routerQuery: RouterQuery
+    private routerQuery: RouterQuery,
   ) {}
 
   public loadReports(): void {
@@ -25,10 +25,10 @@ export class ReportsFacade {
             .pipe(
               catchError(() => {
                 return of(null);
-              })
+              }),
             );
-        })
+        }),
       )
-      .subscribe((reports) => this.store.update({ reports }));
+      .subscribe(reports => this.store.update({ reports }));
   }
 }

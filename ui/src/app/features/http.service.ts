@@ -22,7 +22,7 @@ export class HttpService {
       reportProgress?: boolean;
       responseType?: 'json';
       withCredentials?: boolean;
-    }
+    },
   ) {
     return this.http.get<T>(url, options);
   }

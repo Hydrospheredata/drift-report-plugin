@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class ReportsHttpService {
   constructor(
     private readonly http: HttpService,
-    private routerQuery: RouterQuery
+    private routerQuery: RouterQuery,
   ) {}
 
   get<T>(
@@ -17,24 +17,24 @@ export class ReportsHttpService {
     params: {
       model_name: string;
       model_version: number;
-    }
+    },
   ): Observable<T> {
     return this.routerQuery.selectData('shellBackendUrl').pipe(
       switchMap((shellUrlWithBaseHref: string) => {
         if (shellUrlWithBaseHref) {
           return this.http.get<T>(
             `${shellUrlWithBaseHref}plugin-proxy/data_drift/api/${url}`,
-            { params }
+            { params },
           );
         } else {
           return this.http.get<T>(
             `${environment.host}${
               environment.port ? ':' + environment.port : ''
             }/${url}`,
-            { params }
+            { params },
           );
         }
-      })
+      }),
     );
   }
 }

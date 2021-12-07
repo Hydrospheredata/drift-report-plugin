@@ -5,27 +5,15 @@ import { Observable } from 'rxjs';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { map, pluck } from 'rxjs/operators';
 import { DriftReport } from '../../drift-report/models';
-
-interface PerFeatureReport {
-  [featureName: string]: { [x: string]: number };
-}
-
-interface ReportCommon {
-  report: {
-    per_feature_report: PerFeatureReport;
-  };
-}
+import { isFeatureFailed, ReportCommon } from 'src/app/domain/report';
 
 @Injectable()
 export class ReportsQuery extends Query<ReportsState> {
-  reports$ = this.select((s) => s.reports);
+  reports$ = this.select(s => s.reports);
 
   constructor(protected store: ReportsStore, private routerQuery: RouterQuery) {
     super(store);
   }
-
-  isFeatureFailed = (report: PerFeatureReport) => (feature: string) =>
-    report[feature]['drift-probability'] > 0.25;
 
   selectCurrentDriftReport(): Observable<DriftReport | undefined> {
     return combineQueries([
@@ -35,24 +23,24 @@ export class ReportsQuery extends Query<ReportsState> {
       map(([reports, filename]) => {
         const name = decodeURIComponent(filename);
         return reports.find(
-          (report: { filename: string }) => report.filename === name
+          (report: { filename: string }) => report.filename === name,
         );
       }),
-      pluck('report')
+      pluck('report'),
     );
   }
 
   selectReports() {
     return this.reports$.pipe(
       map(
-        (reports) =>
+        reports =>
           reports &&
           reports.map((reportCommon: ReportCommon) => {
             const perFeatureReport = reportCommon.report.per_feature_report;
             const featureNames = Object.keys(perFeatureReport);
 
             const failedFeatures = featureNames.filter(
-              this.isFeatureFailed(perFeatureReport)
+              isFeatureFailed(perFeatureReport),
             );
 
             return {
@@ -60,8 +48,8 @@ export class ReportsQuery extends Query<ReportsState> {
               failedFeatures,
               featuresNumber: featureNames.length,
             };
-          })
-      )
+          }),
+      ),
     );
   }
 }
