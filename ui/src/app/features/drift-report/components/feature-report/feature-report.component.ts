@@ -4,7 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { FeatureReport, DriftReport } from '../../models';
+import { FeatureReport, DriftReport, Statistics } from '../../models';
 
 @Component({
   selector: 'drift-feature-report',
@@ -15,21 +15,13 @@ import { FeatureReport, DriftReport } from '../../models';
 export class FeatureReportComponent implements OnInit {
   @Input() perFeatureReport!: DriftReport['per_feature_report'];
   selectedFeatureReport!: FeatureReport;
-  // statistics!: {
-  //   [statisticName: string]: {
-  //     change_probability?: number | undefined;
-  //     deployment: string | number | string[] | number[];
-  //     training: string | number | string[] | number[];
-  //     message: string;
-  //     has_changed: boolean;
-  //   };
-  // };
-  columnsToDisplay = [
+  columnsToDisplayNumerical = [
     'name',
     'training data',
     'production data',
     "change's status",
   ];
+  columnsToDisplayCategorical = ['name', "change's status"];
 
   ngOnInit() {
     if (this.perFeatureReport) {
@@ -39,5 +31,9 @@ export class FeatureReportComponent implements OnInit {
 
   get featureNames(): string[] {
     return this.perFeatureReport ? Object.keys(this.perFeatureReport) : [];
+  }
+
+  isCategoricalFeature(statistics: Statistics): boolean {
+    return Object.keys(statistics).includes('Category densities');
   }
 }

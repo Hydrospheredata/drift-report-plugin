@@ -28,3 +28,13 @@ export interface DriftReport {
     report: Array<{ drift_probability_per_feature: number; message: string }>;
   };
 }
+
+export interface Statistics {
+  [statisticName: string]: {
+    change_probability?: number;
+    deployment: number | string | string[] | number[];
+    training: number | string | string[] | number[];
+    message: string;
+    has_changed: boolean;
+  };
+}
