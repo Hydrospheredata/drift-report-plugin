@@ -8,7 +8,10 @@
     </hs-icon>
   </div>
   <div class="font-bold py-2 text-gray-900">Reports</div>
-  <mat-table [dataSource]="reports$ | async" class="rounded-md shadow-lg bg-white mt-3">
+  <mat-table
+    [dataSource]="reports$ | async"
+    class="rounded-md shadow-lg bg-white mt-3"
+  >
     <ng-container matColumnDef="batch">
       <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
       <mat-cell *matCellDef="let element">
@@ -19,12 +22,17 @@
     <ng-container matColumnDef="failed features">
       <mat-header-cell *matHeaderCellDef> failed features </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.failedFeatures }}
+        <ng-container *ngIf="element.failedFeatures.length > 0; else noFailed">
+          {{ element.failedFeatures }}
+        </ng-container>
+        <ng-template #noFailed> - </ng-template>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="total number of features">
-      <mat-header-cell *matHeaderCellDef> total number of features </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        total number of features
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{ element.featuresNumber }}
       </mat-cell>
