@@ -30,6 +30,6 @@ export default class ReportsComponent {
   ];
 
   encode(url: any) {
-    return encodeURIComponent(url);
+    return btoa(url);
   }
 }

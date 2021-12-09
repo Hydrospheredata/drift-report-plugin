@@ -3,7 +3,7 @@ import { combineQueries, Query } from '@datorama/akita';
 import { ReportsStore, ReportsState } from './reports.store';
 import { Observable } from 'rxjs';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
-import { map, pluck } from 'rxjs/operators';
+import { filter, map, pluck } from 'rxjs/operators';
 import { DriftReport } from '../../drift-report/models';
 import { isFeatureFailed, ReportCommon } from 'src/app/domain/report';
 
@@ -20,8 +20,9 @@ export class ReportsQuery extends Query<ReportsState> {
       this.reports$,
       this.routerQuery.selectParams('fileName'),
     ]).pipe(
+      filter(([reports, filename]) => reports && filename),
       map(([reports, filename]) => {
-        const name = decodeURIComponent(filename);
+        const name = atob(filename);
         return reports.find(
           (report: { filename: string }) => report.filename === name,
         );

@@ -8,7 +8,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: 'reports',
+        path: 'drift-reports',
         loadChildren: () =>
           import('../features/reports/reports.module').then(
             m => m.ReportsModule,
