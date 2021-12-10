@@ -1,17 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DriftReportComponent } from '../drift-report/drift-report.component';
+import ReportsPageComponent from './reports-page.component';
 import ReportsComponent from './reports.component';
 
-const routes: Routes = [
-  { path: '', component: ReportsComponent },
+export const routes: Routes = [
   {
-    path: ':fileName',
-    component: DriftReportComponent,
-    loadChildren: () =>
-      import('../drift-report/drift-report.module').then(
-        m => m.DriftReportModule,
-      ),
+    path: '',
+    component: ReportsPageComponent,
+    children: [
+      { path: '', component: ReportsComponent },
+      {
+        path: ':fileName',
+        component: DriftReportComponent,
+        loadChildren: () =>
+          import('../drift-report/drift-report.module').then(
+            m => m.DriftReportModule,
+          ),
+      },
+    ],
   },
 ];
 
