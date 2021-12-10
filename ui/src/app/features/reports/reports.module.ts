@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import ReportsComponent from './reports.component';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { DriftReportModule } from '../drift-report/drift-report.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,28 +13,16 @@ import { HttpService } from '../http.service';
 import { MdlSelectModule } from '@angular-mdl/select';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import { DriftReportComponent } from '../drift-report/drift-report.component';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import {
   hsIconsIconLeft,
   HsUiKitModule,
   IconsRegistryService,
 } from '@hydrosphere/hs-ui-kit';
-
-export const routes: Routes = [
-  { path: '', component: ReportsComponent },
-  {
-    path: ':fileName',
-    component: DriftReportComponent,
-    loadChildren: () =>
-      import('../drift-report/drift-report.module').then(
-        m => m.DriftReportModule,
-      ),
-  },
-];
+import ReportsPageComponent from './reports-page.component';
 
 @NgModule({
-  declarations: [ReportsComponent],
+  declarations: [ReportsComponent, ReportsPageComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -45,7 +33,6 @@ export const routes: Routes = [
     MdlSelectModule,
     FormsModule,
     MatSelectModule,
-    RouterModule.forChild(routes),
     AkitaNgRouterStoreModule,
     HsUiKitModule,
   ],

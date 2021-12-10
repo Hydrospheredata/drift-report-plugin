@@ -12,7 +12,7 @@ function createInitialState(): ReportsState {
   };
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'reports' })
 export class ReportsStore extends Store<ReportsState> {
   constructor() {

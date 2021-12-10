@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ReportsService } from './reports.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ReportsStore } from './reports.store';
 import { of } from 'rxjs';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ReportsFacade {
   constructor(
-    private router: ActivatedRoute,
     private service: ReportsService,
     private store: ReportsStore,
     private routerQuery: RouterQuery,
