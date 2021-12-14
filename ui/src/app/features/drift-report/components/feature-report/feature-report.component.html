@@ -1,29 +1,20 @@
 <div *ngIf="perFeatureReport">
-  <div class="mb-8">
-    <div class="max-w-xs">
-      <div class="text-xs font-bold">
-        Select a feature for a profile comparison:
-      </div>
-      <mat-select
-        class="border-b border-solid border-gray-400"
-        [(value)]="selectedFeatureReport"
-        label="Choose feature"
+  <div class="flex flex-wrap mb-8">
+    <div *ngFor="let featureReport of perFeatureReport | keyvalue: sortByDrift">
+      <div
+        class="feature hover:opacity-100"
+        [ngClass]="{
+          'feature--active': featureReport.key === selectedFeatureName
+        }"
+        (click)="selectFeature(featureReport)"
       >
-        <mat-option
-          *ngFor="let featureReport of perFeatureReport | keyvalue"
-          [value]="featureReport.value"
+        <drift-drift-status
+          [drift]="featureReport.value['drift-probability']"
+          [text]="featureReport.key"
+          [justIcon]="false"
         >
-          <div class="flex justify-between items-center">
-            <span>{{ featureReport.key }}</span>
-            <span class="text-sm">
-              <drift-drift-status
-                [drift]="featureReport.value['drift-probability']"
-              >
-              </drift-drift-status>
-            </span>
-          </div>
-        </mat-option>
-      </mat-select>
+        </drift-drift-status>
+      </div>
     </div>
   </div>
   <div class="mb-8">

@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FeatureReport, DriftReport, Statistics } from '../../models';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'drift-feature-report',
@@ -15,6 +16,7 @@ import { FeatureReport, DriftReport, Statistics } from '../../models';
 export class FeatureReportComponent implements OnInit {
   @Input() perFeatureReport!: DriftReport['per_feature_report'];
   selectedFeatureReport!: FeatureReport;
+  selectedFeatureName: string = '';
   columnsToDisplayNumerical = [
     'name',
     'training data',
@@ -26,6 +28,7 @@ export class FeatureReportComponent implements OnInit {
   ngOnInit() {
     if (this.perFeatureReport) {
       this.selectedFeatureReport = this.perFeatureReport[this.featureNames[0]];
+      this.selectedFeatureName = this.featureNames[0];
     }
   }
 
@@ -35,5 +38,17 @@ export class FeatureReportComponent implements OnInit {
 
   isCategoricalFeature(statistics: Statistics): boolean {
     return Object.keys(statistics).includes('Category densities');
+  }
+
+  sortByDrift(
+    a: KeyValue<string, FeatureReport>,
+    b: KeyValue<string, FeatureReport>,
+  ) {
+    return b.value['drift-probability'] - a.value['drift-probability'];
+  }
+
+  selectFeature(featureReport: KeyValue<string, FeatureReport>) {
+    this.selectedFeatureReport = featureReport.value;
+    this.selectedFeatureName = featureReport.key;
   }
 }

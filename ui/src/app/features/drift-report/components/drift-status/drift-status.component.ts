@@ -11,6 +11,7 @@ export class DriftStatusComponent {
   @Input() drift: number | undefined;
   @Input() size: number = 16;
   @Input() justIcon: boolean = true;
+  @Input() text: string = '';
 
   get stylesMap() {
     return {

@@ -7,8 +7,11 @@
 >
   <hs-icon
     class="text-white"
-    name="{{iconType}}"
+    name="{{ iconType }}"
     [ngStyle]="stylesMap"
   ></hs-icon>
-  <span class="text-white text-xs font-bold px-1" *ngIf="!justIcon">{{ statusText }}</span>
+  <span class="text-white text-xs font-bold px-1" *ngIf="!justIcon && !text">{{
+    statusText
+  }}</span>
+  <span class="text-white text-xs font-bold px-1" *ngIf="text">{{ text }}</span>
 </div>
