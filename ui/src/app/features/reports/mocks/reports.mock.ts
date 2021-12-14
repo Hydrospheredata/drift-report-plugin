@@ -1,5 +1,5 @@
 import { Report } from '../models/reports';
-import { mockDrift1, mockDrift2 } from '../../drift-report/mocks';
+import { mockDrift1, mockDrift2, mockDrift3 } from '../../drift-report/mocks';
 
 export const mockReports: Report[] | any = [
   {
@@ -21,6 +21,6 @@ export const mockReports: Report[] | any = [
     file_timestamp: '2021-12-10 15:41:24.786000',
     model_name: 'adult',
     model_version: 1,
-    report: mockDrift2,
+    report: mockDrift3,
   },
 ];

@@ -28,6 +28,14 @@ export class ReportsQuery extends Query<ReportsState> {
         );
       }),
       pluck('report'),
+      map((report: DriftReport) => {
+        const sortedFeatureReport = Object.fromEntries(
+          Object.entries(report.per_feature_report).sort(([, a], [, b]) => {
+            return b['drift-probability'] - a['drift-probability'];
+          }),
+        );
+        return { ...report, per_feature_report: sortedFeatureReport };
+      }),
     );
   }
 
