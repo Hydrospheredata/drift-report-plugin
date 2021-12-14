@@ -1,4 +1,5 @@
 from typing import Optional
+
 from drift_report.domain.data import SUPPORTED_DTYPES
 from drift_report.proto.monitoring_manager_pb2 import ModelSignature
 from pydantic import BaseModel

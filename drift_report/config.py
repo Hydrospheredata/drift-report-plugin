@@ -3,6 +3,7 @@ from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
+    db_connection_string: str = "postgresql://root:root@localhost:5432/stat_plugin"
     endpoint_override: str = "http://minio:9000"
     self_addr: str = "http://stat:5000"
     debug_env: bool = False
