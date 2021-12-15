@@ -58,7 +58,6 @@ class MonitoringDataSubscriber:
         for response in self.data_stub.GetInferenceDataUpdates(reqs):
             try:
                 print("Got inference data")
-                print(response)
 
                 model = self.model_repo.find(
                     response.model.model_name, response.model.model_version
@@ -91,9 +90,7 @@ class MonitoringDataSubscriber:
                         ack_resp = GetInferenceDataUpdatesRequest(
                             plugin_id=self.plugin_name, ack=ack
                         )
-                        print(f"adding ack to the queue: {ack_resp}")
                         ack_queue.put(ack_resp)
-                        print(f"queue size: {ack_queue.qsize()}")
             except Exception:
                 logging.exception("Error while handling inference data event")
 
@@ -101,9 +98,13 @@ class MonitoringDataSubscriber:
         req = GetModelUpdatesRequest(plugin_id=self.plugin_name)
         for response in self.model_stub.GetModelUpdates(req):
             try:
+                model_exists = self.model_repo.find(
+                    response.model.model_name, response.model.model_version
+                )
+                if model_exists:
+                    continue  # skip if we already have the model in the state
+                print("Incoming model")
                 training_data_url = response.training_data_objs[0].key
-                print("Prishla model")
-                print(training_data_url)
                 model = Model(
                     name=response.model.model_name,
                     version=response.model.model_version,

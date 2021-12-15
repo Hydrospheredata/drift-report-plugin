@@ -1,1 +1,1 @@
-python -m drift_report.app
+alembic --raiseerr upgrade head && python -m drift_report.app

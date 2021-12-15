@@ -57,6 +57,7 @@ WORKDIR /app
 
 COPY --from=build $VENV_PATH $VENV_PATH
 COPY --chown=app:app ./start.sh start.sh
+COPY --chown=app:app ./alembic.ini alembic.ini
 COPY --chown=app:app drift_report ./drift_report
 COPY --from=static-fe --chown=app:app frontend/dist/ ./drift_report/resources/static/
 
