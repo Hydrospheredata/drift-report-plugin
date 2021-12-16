@@ -1,13 +1,5 @@
-.feature {
-  @apply flex justify-between items-center mr-3 mb-3 cursor-pointer opacity-70;
-
-  &:hover {
-    @apply opacity-100 ease-in duration-150;
-  }
-
-  &--active {
-    @apply opacity-100;
-  }
+.features {
+  @apply flex justify-between items-center mr-3 mb-3 cursor-pointer;
 }
 
 .statistics__drift {

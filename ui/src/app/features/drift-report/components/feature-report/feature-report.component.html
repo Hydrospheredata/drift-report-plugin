@@ -1,19 +1,12 @@
 <div *ngIf="perFeatureReport">
   <div class="flex flex-wrap mb-8">
     <div *ngFor="let featureReport of perFeatureReport | keyvalue: sortByDrift">
-      <div
-        class="feature hover:opacity-100"
-        [ngClass]="{
-          'feature--active': featureReport.key === selectedFeatureName
-        }"
-        (click)="selectFeature(featureReport)"
-      >
-        <drift-drift-status
+      <div class="features" (click)="selectFeature(featureReport)">
+        <drift-feature-chip
           [drift]="featureReport.value['drift-probability']"
-          [text]="featureReport.key"
-          [justIcon]="false"
-        >
-        </drift-drift-status>
+          [featureName]="featureReport.key"
+          [selectedFeatureName]="selectedFeatureName"
+        ></drift-feature-chip>
       </div>
     </div>
   </div>

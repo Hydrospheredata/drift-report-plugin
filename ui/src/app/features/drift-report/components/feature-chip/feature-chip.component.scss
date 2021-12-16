@@ -1,0 +1,11 @@
+.feature {
+  @apply rounded-lg flex items-center justify-between py-1 px-2 border border-gray-400;
+
+  &:hover {
+    @apply bg-gray-200 ease-in duration-150;
+  }
+
+  &--active {
+    @apply bg-gray-200;
+  }
+}

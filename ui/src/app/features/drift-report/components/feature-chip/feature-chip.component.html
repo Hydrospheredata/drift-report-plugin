@@ -1,0 +1,15 @@
+<div
+  class="feature"
+  [ngClass]="{
+    'feature--active': featureName === selectedFeatureName
+  }"
+>
+  <hs-icon
+    class="text-white w-5 h-5"
+    name="{{ iconType }}"
+    [ngStyle]="{ color: iconColor }"
+  ></hs-icon>
+  <span class="text-gray-700 text-xs font-bold px-1" *ngIf="featureName">{{
+    featureName
+  }}</span>
+</div>
