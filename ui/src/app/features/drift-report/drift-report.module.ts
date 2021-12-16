@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
   hsIconsCheck,
+  hsIconsError,
   hsIconsIconErrorOutline,
   hsIconsIconLoader,
   hsIconsWarning,
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ReportsHttpService } from '../reports/reports-http.service';
+import { FeatureChipComponent } from './components/feature-chip/feature-chip.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ReportsHttpService } from '../reports/reports-http.service';
     DriftStatusComponent,
     HistogramComponent,
     HeatmapComponent,
+    FeatureChipComponent,
   ],
   imports: [
     CommonModule,
@@ -52,6 +55,7 @@ export class DriftReportModule {
       hsIconsIconErrorOutline,
       hsIconsCheck,
       hsIconsWarning,
+      hsIconsError,
     ]);
   }
 }
