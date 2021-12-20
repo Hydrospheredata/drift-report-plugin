@@ -1,13 +1,12 @@
 from drift_report.domain.statistical_report.statistical_report import StatisticalReport
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, Integer, JSON
 from drift_report.db import Session, Base
-
 
 class ReportOrm(Base):
     __tablename__ = "reports"
     model_name = Column(String, primary_key=True, nullable=False)
     model_version = Column(Integer, primary_key=True, nullable=False)
+    filename = Column(String, primary_key=True, nullable=False)
     report = Column(JSON, nullable=False)
 
 
@@ -16,6 +15,7 @@ class ReportRepository:
         rep = ReportOrm(
             model_name=report.model_name,
             model_version=report.model_version,
+            filename=report.filename,
             report=report.to_json(),
         )
         session = Session()
