@@ -1,62 +1,72 @@
-<div class="px-6 py-4 h-full">
-  <div class="mb-2">
-    <hs-icon
-      class="w-5 h-5 text-gray-500 cursor-pointer"
-      name="icon_left"
-      [routerLink]="[
-        '/',
-        'models',
-        modelName$ | async,
-        modelVersion$ | async,
-        'reports'
-      ]"
-    >
-    </hs-icon>
-  </div>
-  <div class="mb-8">
-    <div class="font-bold mb-2">Report</div>
-    <div class="rounded-md shadow-lg p-8 bg-white">
-      <div class="flex items-center">
-        <div>Overall drift's status</div>
-        <div class="ml-2">
-          <drift-drift-status
-            [drift]="(drift$ | async)?.overall_probability_drift"
-            [justIcon]="false"
-          ></drift-drift-status>
-          <!--          <span-->
-          <!--            class="report__overall-decision-text"-->
-          <!--            *ngIf="(drift-report$ | async)?.warnings.final_decision as decision"-->
-          <!--            >{{ decision }}</span-->
-          <!--          >-->
-        </div>
+<div class="px-6 py-4">
+  <ng-container *ngIf="drift$ | async as drift; else loader">
+    <div class="h-full">
+      <div class="mb-2">
+        <hs-icon
+          class="w-5 h-5 text-gray-500 cursor-pointer"
+          name="icon_left"
+          [routerLink]="[
+            '/',
+            'models',
+            modelName$ | async,
+            modelVersion$ | async,
+            'reports'
+          ]"
+        >
+        </hs-icon>
       </div>
-      <div *ngIf="(drift$ | async)?.warnings?.report as warnings">
-        <ng-template class="mt-4">
-          <div *ngFor="let warning of warnings" class="report__warning mt-4">
-            <span
-              class="mr-2"
-              [drift]="warning && warning.drift_probability_per_feature"
-              driftColorByDrift
-            >
-              <hs-icon class="w-7 h-7" name="icon_error_outline"></hs-icon>
-            </span>
-            <div class="text-sm text-gray-800">
-              {{ warning && warning.message }}
+      <div class="mb-8">
+        <div class="font-bold mb-2">Report</div>
+        <div class="rounded-md shadow-lg p-8 bg-white">
+          <div class="flex items-center">
+            <div>Overall drift's status</div>
+            <div class="ml-2">
+              <drift-drift-status
+                [drift]="drift?.overall_probability_drift"
+                [justIcon]="false"
+              ></drift-drift-status>
+              <!--          <span-->
+              <!--            class="report__overall-decision-text"-->
+              <!--            *ngIf="(drift-report$ | async)?.warnings.final_decision as decision"-->
+              <!--            >{{ decision }}</span-->
+              <!--          >-->
             </div>
           </div>
-        </ng-template>
+          <div *ngIf="drift?.warnings?.report as warnings">
+            <ng-template class="mt-4">
+              <div
+                *ngFor="let warning of warnings"
+                class="report__warning mt-4"
+              >
+                <span
+                  class="mr-2"
+                  [drift]="warning && warning.drift_probability_per_feature"
+                  driftColorByDrift
+                >
+                  <hs-icon class="w-7 h-7" name="icon_error_outline"></hs-icon>
+                </span>
+                <div class="text-sm text-gray-800">
+                  {{ warning && warning.message }}
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold mb-2">Feature Analysis</div>
+        <div class="rounded-md shadow-lg p-8 bg-white" *ngIf="drift">
+          <drift-feature-report
+            [perFeatureReport]="drift.per_feature_report"
+          ></drift-feature-report>
+        </div>
       </div>
     </div>
-  </div>
-  <div>
-    <div class="font-bold mb-2">Feature Analysis</div>
-    <div
-      class="rounded-md shadow-lg p-8 bg-white"
-      *ngIf="drift$ | async as drift"
-    >
-      <drift-feature-report
-        [perFeatureReport]="drift.per_feature_report"
-      ></drift-feature-report>
-    </div>
-  </div>
+  </ng-container>
 </div>
+
+<ng-template #loader>
+  <div class="flex justify-center">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+</ng-template>

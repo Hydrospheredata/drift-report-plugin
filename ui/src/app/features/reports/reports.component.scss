@@ -8,3 +8,9 @@
   width: 15% !important;
   flex: 0 0 15% !important;
 }
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: gray!important;
+}
+
+
