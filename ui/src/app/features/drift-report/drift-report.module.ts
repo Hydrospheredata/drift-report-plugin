@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ReportsHttpService } from '../reports/reports-http.service';
 import { FeatureChipComponent } from './components/feature-chip/feature-chip.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { FeatureChipComponent } from './components/feature-chip/feature-chip.com
     FormsModule,
     MatSelectModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
   providers: [IconsRegistryService, ReportsHttpService],
 })

@@ -1,48 +1,63 @@
 <div class="px-6 py-4">
-  <div class="mb-2">
-    <hs-icon
-      class="w-5 h-5 text-gray-500 cursor-pointer"
-      name="icon_left"
-      [routerLink]="['/', 'models', modelName$ | async, modelVersion$ | async]"
+  <ng-container *ngIf="reports$ | async as reports; else loader">
+    <div class="mb-2">
+      <hs-icon
+        class="w-5 h-5 text-gray-500 cursor-pointer"
+        name="icon_left"
+        [routerLink]="[
+          '/',
+          'models',
+          modelName$ | async,
+          modelVersion$ | async
+        ]"
+      >
+      </hs-icon>
+    </div>
+    <div class="font-bold py-2 text-gray-900">Reports</div>
+    <mat-table
+      [dataSource]="reports"
+      class="rounded-md shadow-lg bg-white mt-3"
     >
-    </hs-icon>
-  </div>
-  <div class="font-bold py-2 text-gray-900">Reports</div>
-  <mat-table
-    [dataSource]="reports$ | async"
-    class="rounded-md shadow-lg bg-white mt-3"
-  >
-    <ng-container matColumnDef="batch">
-      <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{ element.filename }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="batch">
+        <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.filename }}
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="failed features">
-      <mat-header-cell *matHeaderCellDef> failed features </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element.failedFeatures?.length > 0; else noFailed">
-          {{ element.failedFeatures }}
-        </ng-container>
-        <ng-template #noFailed> - </ng-template>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="failed features">
+        <mat-header-cell *matHeaderCellDef> failed features </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <ng-container
+            *ngIf="element.failedFeatures?.length > 0; else noFailed"
+          >
+            {{ element.failedFeatures }}
+          </ng-container>
+          <ng-template #noFailed> - </ng-template>
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="total number of features">
-      <mat-header-cell *matHeaderCellDef>
-        total number of features
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{ element.featuresNumber }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="total number of features">
+        <mat-header-cell *matHeaderCellDef>
+          total number of features
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.featuresNumber }}
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row
-      class="cursor-pointer hover:bg-gray-100 duration-150"
-      [routerLink]="encode(row.filename)"
-      *matRowDef="let row; columns: displayedColumns"
-    ></mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        class="cursor-pointer hover:bg-gray-100 duration-150"
+        [routerLink]="encode(row.filename)"
+        *matRowDef="let row; columns: displayedColumns"
+      ></mat-row>
+    </mat-table>
+  </ng-container>
 </div>
+
+<ng-template #loader>
+  <div class="flex justify-center">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+</ng-template>
