@@ -31,7 +31,8 @@ def upgrade():
         sa.Column("model_name", sa.String(), nullable=False),
         sa.Column("model_version", sa.Integer(), nullable=False),
         sa.Column("report", sa.JSON(), nullable=False),
-        sa.PrimaryKeyConstraint("model_name", "model_version"),
+        sa.Column('filename', sa.String(), nullable=False),
+        sa.PrimaryKeyConstraint("model_name", "model_version", "filename"),
     )
     # ### end Alembic commands ###
 

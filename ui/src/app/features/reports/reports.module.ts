@@ -20,6 +20,7 @@ import {
   IconsRegistryService,
 } from '@hydrosphere/hs-ui-kit';
 import ReportsPageComponent from './reports-page.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [ReportsComponent, ReportsPageComponent],
@@ -35,6 +36,7 @@ import ReportsPageComponent from './reports-page.component';
     MatSelectModule,
     AkitaNgRouterStoreModule,
     HsUiKitModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     ReportsStore,
