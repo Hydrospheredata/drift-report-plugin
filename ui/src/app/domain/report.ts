@@ -7,7 +7,3 @@ export interface ReportCommon {
     per_feature_report: PerFeatureReport;
   };
 }
-
-export const isFeatureFailed =
-  (report: PerFeatureReport) => (feature: string) =>
-    report[feature]['drift-probability'] > 0.25;

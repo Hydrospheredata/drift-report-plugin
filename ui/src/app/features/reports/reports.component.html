@@ -1,60 +1,20 @@
-<div class="px-6 py-4">
+<div class="p-10">
   <ng-container *ngIf="reports$ | async as reports; else loader">
-    <div class="mb-2">
-      <hs-icon
-        class="w-5 h-5 text-gray-500 cursor-pointer"
-        name="icon_left"
-        [routerLink]="[
-          '/',
-          'models',
-          modelName$ | async,
-          modelVersion$ | async
-        ]"
-      >
-      </hs-icon>
-    </div>
-    <div class="font-bold py-2 text-gray-900">Reports</div>
-    <mat-table
-      [dataSource]="reports"
-      class="rounded-md shadow-lg bg-white mt-3"
+    <div class="font-bold mt-2 mb-4 text-gray-900">Reports</div>
+    <div
+      class="bg-white p-6 pb-2 shadow-lg mb-8"
+      *ngIf="reports[0]?.features?.length"
     >
-      <ng-container matColumnDef="batch">
-        <mat-header-cell *matHeaderCellDef> batch </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          {{ element.filename }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="failed features">
-        <mat-header-cell *matHeaderCellDef> failed features </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <ng-container
-            *ngIf="element.failedFeatures?.length > 0; else noFailed"
-          >
-            {{ element.failedFeatures }}
-          </ng-container>
-          <ng-template #noFailed> - </ng-template>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="total number of features">
-        <mat-header-cell *matHeaderCellDef>
-          total number of features
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          {{ element.featuresNumber }}
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        class="cursor-pointer hover:bg-gray-100 duration-150"
-        [routerLink]="encode(row.filename)"
-        *matRowDef="let row; columns: displayedColumns"
-      ></mat-row>
-    </mat-table>
+      <drift-data-section
+        *ngIf="reports"
+        [reports]="reports"
+        [features]="reports[0]?.features"
+      ></drift-data-section>
+    </div>
   </ng-container>
 </div>
+
+<router-outlet></router-outlet>
 
 <ng-template #loader>
   <div class="flex justify-center">

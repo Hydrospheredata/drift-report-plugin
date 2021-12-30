@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { filter, map, pluck } from 'rxjs/operators';
 import { DriftReport } from '../../drift-report/models';
-import { isFeatureFailed, ReportCommon } from 'src/app/domain/report';
+import { ReportCommon } from 'src/app/domain/report';
 
 @Injectable()
 export class ReportsQuery extends Query<ReportsState> {
@@ -48,14 +48,9 @@ export class ReportsQuery extends Query<ReportsState> {
             const perFeatureReport = reportCommon.report.per_feature_report;
             const featureNames = Object.keys(perFeatureReport);
 
-            const failedFeatures = featureNames.filter(
-              isFeatureFailed(perFeatureReport),
-            );
-
             return {
               ...reportCommon,
-              failedFeatures,
-              featuresNumber: featureNames.length,
+              features: featureNames,
             };
           }),
       ),
