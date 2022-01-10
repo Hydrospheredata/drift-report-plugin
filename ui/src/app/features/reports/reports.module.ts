@@ -21,9 +21,17 @@ import {
 } from '@hydrosphere/hs-ui-kit';
 import ReportsPageComponent from './reports-page.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DataSectionComponent } from './components/data-section/data-section.component';
+import { ColumnComponent } from './components/column/column.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [ReportsComponent, ReportsPageComponent],
+  declarations: [
+    ReportsComponent,
+    ReportsPageComponent,
+    DataSectionComponent,
+    ColumnComponent,
+  ],
   imports: [
     CommonModule,
     MatTableModule,
@@ -37,6 +45,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AkitaNgRouterStoreModule,
     HsUiKitModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
   providers: [
     ReportsStore,

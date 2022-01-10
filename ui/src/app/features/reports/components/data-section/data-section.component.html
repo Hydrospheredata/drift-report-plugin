@@ -1,0 +1,23 @@
+<div *ngIf="reports" class="reports-data">
+  <div class="flex">
+    <div>
+      <ul class="reports-data__labels">
+        <li class="reports-data__feature" *ngFor="let feature of features">
+          {{ feature }}
+        </li>
+      </ul>
+    </div>
+    <div *ngFor="let report of reports">
+      <drift-column
+        *ngIf="report as column"
+        [ngClass]="{
+          'column--active': (selectedFileName | async) === column.filename
+        }"
+        class="column"
+        [column]="column"
+        [features]="features"
+        (click)="onColumnClick(column)"
+      ></drift-column>
+    </div>
+  </div>
+</div>

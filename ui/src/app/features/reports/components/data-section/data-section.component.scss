@@ -1,0 +1,34 @@
+.column {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.1s all ease;
+  display: flex;
+  flex-direction: column;
+  &:hover,
+  &--active {
+    opacity: 1;
+  }
+}
+
+.reports-data {
+  align-items: center;
+  margin-bottom: 16px;
+  min-width: 840px;
+  position: relative;
+  &__labels {
+    list-style: none;
+    margin: 0 8px 0 0;
+    padding: 0;
+    overflow: auto;
+    max-width: 100px;
+    width: 120px;
+    text-align: right;
+  }
+  &__feature {
+    @apply text-gray-500;
+    line-height: 14px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

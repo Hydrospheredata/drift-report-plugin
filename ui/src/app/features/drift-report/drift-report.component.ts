@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { DriftReport } from './models';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { ReportsQuery } from '../reports/state/reports.query';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'drift-report',
@@ -12,8 +13,9 @@ import { ReportsQuery } from '../reports/state/reports.query';
 })
 export class DriftReportComponent implements OnInit {
   drift$!: Observable<DriftReport | undefined>;
-  modelName$ = this.routerQuery.selectParams('modelName');
-  modelVersion$ = this.routerQuery.selectParams('modelVersion');
+  fileName$ = this.routerQuery
+    .selectParams('fileName')
+    .pipe(map(name => atob(name)));
 
   constructor(private query: ReportsQuery, private routerQuery: RouterQuery) {}
 
