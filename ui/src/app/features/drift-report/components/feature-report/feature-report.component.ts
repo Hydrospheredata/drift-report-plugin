@@ -1,8 +1,9 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
-  ChangeDetectionStrategy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { FeatureReport, DriftReport, Statistics } from '../../models';
 import { KeyValue } from '@angular/common';
@@ -13,7 +14,7 @@ import { KeyValue } from '@angular/common';
   styleUrls: ['./feature-report.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureReportComponent implements OnInit {
+export class FeatureReportComponent implements OnChanges {
   @Input() perFeatureReport!: DriftReport['per_feature_report'];
   selectedFeatureReport!: FeatureReport;
   selectedFeatureName: string = '';
@@ -25,7 +26,7 @@ export class FeatureReportComponent implements OnInit {
   ];
   columnsToDisplayCategorical = ['name', "change's status"];
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.perFeatureReport) {
       this.selectedFeatureReport = this.perFeatureReport[this.featureNames[0]];
       this.selectedFeatureName = this.featureNames[0];
